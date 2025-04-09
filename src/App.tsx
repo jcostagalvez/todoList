@@ -3,7 +3,7 @@ import { Todos } from './Todos';
 import { Footer } from './Footer';
 import { FilterValue } from './vite-env';
 import { TODO_FILTERS } from './consts';
-
+import { Header } from './header';
 const mockTodos = [
   {
     id: 1,
@@ -62,6 +62,18 @@ const App = (): JSX.Element =>{
     console.log('filtro escogido en react ----> ' + filter);
     setFilterSelected(filter)
   }
+  const addTarea = (todo : {title: string, emoji:string}): void => {
+    const newTodo = {
+      id: todos.length + 2,
+      title: todo.title,
+      completed: false,
+      emoji:todo.emoji
+    }
+    const newTodos = [...todos, newTodo];
+    setTodos(newTodos);
+  
+    
+  }
 
   const onfilterTodo = todos.filter(todo => {
     if(filterSelected == TODO_FILTERS.ACTIVE) return !todo.completed;
@@ -71,6 +83,7 @@ const App = (): JSX.Element =>{
   
   return(
     <div className='todoapp'>
+      <Header onSaveTarea={addTarea}/>
       <Todos todos={onfilterTodo} onremove ={handleRemove} onselect = {handlecheck}/>
       <Footer activeCount = {mapActiveCompleted().get('active').length}
               completedCount= {mapActiveCompleted().get('Completed').length}
