@@ -1,5 +1,5 @@
 import { Filters } from "./Filters"
-import { FilterValue } from "./vite-env"
+import { FilterValue } from "../../utils/typeScript/vite-env"
 
 interface props {
     handleFilterChange: (filter: FilterValue) => void

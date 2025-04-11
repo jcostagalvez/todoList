@@ -1,5 +1,5 @@
-import { TodoItem } from './Todo'
-import { type ListOfTodos } from './vite-env'
+import { TodoItem } from '../header/todo/Todo'
+import { type ListOfTodos } from '../../utils/typeScript/vite-env'
 import 'todomvc-app-css/index.css'
 
 //Esto solo podemso hacerlo con React.FC y sirve por asi decirlo para pasarle parametros

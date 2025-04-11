@@ -1,0 +1,43 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f4f4f4;
+    padding: 15px 20px;
+    border-bottom: 2px solid #ddd;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Título del header */
+  .header-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin: 0;
+  }
+  
+  /* Botón para añadir una nueva tarea */
+  .add-task-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    width: 50%;
+  }
+  
+  .add-task-btn:focus {
+    outline: none;
+    box-shadow: none;
+  }
+  
+  .add-task-icon {
+    margin-right: 1.2%;
+    font-size: 24px;
+    font-weight: bold;
+    color: #28a745;
+    transition: color 0.2s ease-in-out;
+  }
+  
+  .add-task-btn:hover .add-task-icon {
+    color: #fff;
+  }

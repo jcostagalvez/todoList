@@ -1,7 +1,7 @@
 // componente de linea del todo
 
 import React from "react";
-import { type Todo } from "./vite-env";
+import { type Todo } from "../../../utils/typeScript/vite-env";
 
 interface props{
     todo:Todo,

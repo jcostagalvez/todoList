@@ -1,6 +1,6 @@
 import { useState } from "react";
 import ReactDOM from "react-dom";
-import './assets/popUp.css';
+import '../../../utils/css/popUp.css';
 interface props {
   onsave: (todo : {title: string, emoji:string}) => void,
   onClose: (isActive: true) => void

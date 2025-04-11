@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import {CreateTodo} from './CreateTodo'
-import './assets/header.css';
+import {CreateTodo} from './todo/CreateTodo'
+import '../../utils/css//header.css';
 interface props {
     onSaveTarea:  (todo : {title: string, emoji:string}) => void
 }

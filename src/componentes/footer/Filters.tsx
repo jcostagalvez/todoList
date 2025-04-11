@@ -1,5 +1,5 @@
-import { FILTERS_BUTTONS} from "./consts"
-import { FilterValue } from "./vite-env"
+import { FILTERS_BUTTONS} from "../../utils/typeScript/consts"
+import { FilterValue } from "../../utils/typeScript/vite-env"
 
 interface props {
     onFilterChange: (filter: FilterValue) => void,
