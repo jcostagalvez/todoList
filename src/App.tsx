@@ -1,7 +1,7 @@
 import { JSX, useMemo, useState } from 'react';
 import { Todos } from './componentes/list component/Todos';
 import { Footer } from './componentes/footer/Footer';
-import { Paginacion } from './componentes/paginacion/paginacion';
+import { Paginacion } from './componentes/Paginacion_Componente/Paginacion';
 import { FilterValue } from './utils/typeScript/vite-env';
 import { TODO_FILTERS } from './utils/typeScript/consts';
 import { Header } from './componentes/header/header';
@@ -78,7 +78,8 @@ const App = (): JSX.Element => {
         todo.id === id ? { ...todo, completed: !todo.completed } : todo
       )
     );
-    goToNextPageWithTodo();
+
+    if (filter != 'all') goToNextPageWithTodo();
 
   };
 

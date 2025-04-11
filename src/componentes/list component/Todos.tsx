@@ -17,7 +17,7 @@ export const Todos: React.FC<props> = ({todos, onremove, onselect}) =>{
         <h1  style={style} >Lista de tareas para el {actualDate}</h1>
         <ul className='todo-list'>
           {todos.map(todo => (
-            <li key={todo.id} className={todo.completed ? 'completed' : ''}>
+            <li draggable="true" key={todo.id} className={todo.completed ? 'completed' : ''}>
                 <TodoItem  todo = {todo} onremove={onremove} onselect={onselect}/>  
             </li>
           ))}

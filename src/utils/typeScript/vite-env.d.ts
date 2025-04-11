@@ -1,3 +1,4 @@
+declare module '*.css';
 import { TODO_FILTERS } from "./consts";
 
 import { TODO_FILTERS } from "./consts";

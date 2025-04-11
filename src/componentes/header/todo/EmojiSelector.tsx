@@ -12,7 +12,7 @@ interface EmojiSelectorProps {
 
 const emojis: Emoji[] = [
   { emoji: '😍', label: 'Enamorado' },
-  { emoji: '🚀', label: 'Cohete' },
+  { emoji: '🚀', label: 'Cohete' }, 
   { emoji: '💻', label: 'Ordenador' },
   { emoji: '🔥', label: 'Fuego' },
   { emoji: '👷', label: 'Trabajando' },
