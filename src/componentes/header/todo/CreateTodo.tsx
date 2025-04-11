@@ -1,6 +1,7 @@
 import { useState } from "react";
+import { EmojiSelector } from "./EmojiSelector";
 import ReactDOM from "react-dom";
-import '../../../utils/css/popUp.css';
+import "../../../utils/css/popUp.css";
 interface props {
   onsave: (todo : {title: string, emoji:string}) => void,
   onClose: (isActive: true) => void
@@ -8,16 +9,18 @@ interface props {
 
 export const CreateTodo: React.FC <props>=({onsave, onClose}) => {
   const [title, setTitle] = useState<string>('')
-
+  const [emoji, setEmoji] = useState<string>('')
   const handleClick = () : void => {
-    onsave({title: title, emoji:'⌚'});
+    onsave({title: title, emoji:emoji});
     onClose(true);
   }
 
   const handleClose = () : void => {
     onClose(true);
   }
-
+  const handleEmojiSelect = (emoji: string) : void => {
+    setEmoji(emoji);
+  }
     return ReactDOM.createPortal(
       <>
         <div>
@@ -34,6 +37,7 @@ export const CreateTodo: React.FC <props>=({onsave, onClose}) => {
                 className="input-field"
                 onChange={(e) => setTitle(e.target.value)}
               />
+              <EmojiSelector onEmojiSelect = {handleEmojiSelect}/>
               <div className="button-group">
                 <button className="save-btn" 
                 onClick={handleClick}>

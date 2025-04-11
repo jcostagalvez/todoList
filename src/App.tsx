@@ -9,18 +9,8 @@ import { Header } from './componentes/header/header';
 const mockTodos = [
   { id: 1, title: 'Ir a la manifestación', completed: true, emoji: '🧨' },
   { id: 2, title: 'Realizar el to do', completed: false, emoji: '👷' },
-  { id: 3, title: 'Ver a Yamila', completed: false, emoji: '😍' },
-  { id: 4, title: 'Convertirlo en NPM Package para que todo puedan disfrutarlo', completed: false, emoji: '💻' },
-  { id: 5, title: 'Ir a la manifestación otra vez', completed: true, emoji: '🧨' },
-  { id: 6, title: 'Otra tarea más', completed: false, emoji: '👷' },
-  { id: 7, title: 'Ir a la manifestación', completed: true, emoji: '🧨' },
-  { id: 8, title: 'Realizar el to do', completed: false, emoji: '👷' },
-  { id: 9, title: 'Ver a Yamila', completed: false, emoji: '😍' },
-  { id: 10, title: 'Convertirlo en NPM Package para que todo puedan disfrutarlo', completed: false, emoji: '💻' },
-  { id: 11, title: 'Ir a la manifestación otra vez', completed: true, emoji: '🧨' },
-  { id: 12, title: 'Otra tarea más', completed: false, emoji: '👷' },
-  { id: 13, title: 'Tarea Impar', completed: false, emoji: '👷' },
-  { id: 14, title: 'Tarea par', completed: false, emoji: '👷' },
+  { id: 3, title: 'Comprar ropa de segunda mano', completed: false, emoji: '😍' },
+  { id: 4, title: 'Subirlo a GitHub', completed: false, emoji: '💻' },
 ];
 
 const App = (): JSX.Element => {

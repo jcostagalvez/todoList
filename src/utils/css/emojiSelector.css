@@ -1,0 +1,39 @@
+.emoji-selector-container {
+  font-family: sans-serif;
+  padding: 5%;
+  background-color: #f9f9f9;
+  text-align: center;
+  margin-bottom: 2%;
+  }
+  
+  .emoji-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 16px;
+  }
+  
+  .emoji-button {
+    font-size: 184%;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border-radius: 8px;
+  }
+  
+  .emoji-button:hover {
+    transform: scale(1.2);
+  }
+  
+  .emoji-button.selected {
+    box-shadow: 0 0 0 2px #4a90e2;
+    background-color: #e0f0ff;
+  }
+  
+  .emoji-preview {
+    font-size: 30%;
+    margin-top: 5%;
+    transition: transform 0.2s ease;
+  }
