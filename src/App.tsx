@@ -62,8 +62,15 @@ const App = (): JSX.Element => {
 
   const removeTodo = (id: number) => {
     setTodos(prev => prev.filter(todo => todo.id !== id));
+    goToNextPageWithTodo();
   };
 
+  const goToNextPageWithTodo = () => {
+    if(currentPage == totalPages && currentTodos.length == 1){
+      const changePage = currentPage == 1 ? 1: currentPage - 1;
+      setCurrentPage(changePage)
+    }
+  }
   const toggleTodo = (id: number) => {
     
     setTodos(prev =>
@@ -71,13 +78,7 @@ const App = (): JSX.Element => {
         todo.id === id ? { ...todo, completed: !todo.completed } : todo
       )
     );
-    console.log('pagina actual ---> en el toggle', currentPage);
-    console.log('total de paginas ---> en el toggle', totalPages);
-    console.log('currentTodos ---> en el toggle', currentTodos.length);
-    if(currentPage == totalPages && currentTodos.length == 1){
-      const changePage = currentPage == 1 ? 1: currentPage - 1;
-      setCurrentPage(changePage)
-    }
+    goToNextPageWithTodo();
 
   };
 
