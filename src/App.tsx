@@ -2,12 +2,12 @@ import { JSX, useMemo, useState } from 'react';
 import { Todos } from './componentes/list component/Todos';
 import { Footer } from './componentes/footer/Footer';
 import { Paginacion } from './componentes/Paginacion_Componente/Paginacion';
-import { FilterValue } from './utils/typeScript/vite-env';
+import { FilterValue, ListOfTodos } from './utils/typeScript/vite-env';
 import { TODO_FILTERS } from './utils/typeScript/consts';
 import { Header } from './componentes/header/header';
 
 const mockTodos = [
-  { id: 1, title: 'Ir a la manifestación', completed: true, emoji: '🧨' },
+  { id: 1, title: 'Ir a la manifestación', completed: false, emoji: '🧨' },
   { id: 2, title: 'Realizar el to do', completed: false, emoji: '👷' },
   { id: 3, title: 'Comprar ropa de segunda mano', completed: false, emoji: '😍' },
   { id: 4, title: 'Subirlo a GitHub', completed: false, emoji: '💻' },
@@ -71,13 +71,20 @@ const App = (): JSX.Element => {
       setCurrentPage(changePage)
     }
   }
+
   const toggleTodo = (id: number) => {
     
-    setTodos(prev =>
-      prev.map(todo =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo
-      )
-    );
+    setTodos(prev => {
+      const updatedTodos = prev.map(todo =>
+      todo.id === id ? { ...todo, completed: !todo.completed } : todo
+      );
+      const toggledTodo = updatedTodos.find(todo => todo.id === id);
+      if (toggledTodo && toggledTodo.completed) {
+      // Move the toggled todo to the end of the list
+      return [...updatedTodos.filter(todo => todo.id !== id), toggledTodo];
+      }
+      return updatedTodos;
+    });
 
     if (filter != 'all') goToNextPageWithTodo();
 
@@ -96,13 +103,28 @@ const App = (): JSX.Element => {
   const changePage = (page: number) => {
     setCurrentPage(page);
   };
+  
+  const handleDragdrop = (todosOrder: ListOfTodos) => {
+    setTodos(prev => {
+      const updatedTodos = [...prev];
+      todosOrder.forEach((todo, index) => {
+      const originalIndex = updatedTodos.findIndex(t => t.id === todo.id);
+      if (originalIndex !== -1) {
+        updatedTodos.splice(originalIndex, 1);
+        updatedTodos.splice(index, 0, todo);
+      }
+      });
+      return updatedTodos;
+    });
+  }
 
   return (
     <div className="todoapp">
       <Header onSaveTarea={addTodo} />
       <Todos todos={currentTodos} 
       onremove={removeTodo} 
-      onselect={toggleTodo} />
+      onselect={toggleTodo} 
+      onDragDrop = {handleDragdrop}/>
       <Paginacion
         totalPaginas={pageArray}
         arrayPaginas={visiblePages}
