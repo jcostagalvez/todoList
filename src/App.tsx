@@ -1,22 +1,44 @@
-import { JSX, useMemo, useState } from 'react';
+import { JSX, useEffect, useMemo, useState } from 'react';
 import { Todos } from './componentes/list component/Todos';
 import { Footer } from './componentes/footer/Footer';
 import { Paginacion } from './componentes/Paginacion_Componente/Paginacion';
-import { FilterValue, ListOfTodos } from './utils/typeScript/vite-env';
+import { FilterValue, ListOfTodos, Todo } from './utils/typeScript/vite-env';
 import { TODO_FILTERS } from './utils/typeScript/consts';
 import { Header } from './componentes/header/header';
+import { auth, db, provider } from './firebase';
+import { collection, getDocs, query } from 'firebase/firestore';
+import { signInWithPopup } from 'firebase/auth';
 
-const mockTodos = [
-  { id: 1, title: 'Ir a la manifestación', completed: false, emoji: '🧨' },
-  { id: 2, title: 'Realizar el to do', completed: false, emoji: '👷' },
-  { id: 3, title: 'Comprar ropa de segunda mano', completed: false, emoji: '😍' },
-  { id: 4, title: 'Subirlo a GitHub', completed: false, emoji: '💻' },
-];
 
 const App = (): JSX.Element => {
-  const [todos, setTodos] = useState(mockTodos);
+  const [todos, setTodos] = useState<Todo[]>([])
   const [filter, setFilter] = useState<FilterValue>(TODO_FILTERS.ALL);
   const [currentPage, setCurrentPage] = useState(1);
+
+  const getTodos = async () => {
+    console.log('Pasa por el metodo async');
+    try {
+      const q = query(collection(db, 'tareas'));
+      const querySnapshot = await getDocs(q);
+      console.log('Esta llegando al getTodos')
+      const todos: Todo[] = querySnapshot.docs.map(doc => {
+        const data = doc.data() as Omit<Todo, "id">;
+        return {
+          id: doc.id,
+          ...data
+        };
+      });
+      setTodos(todos);
+      console.log('todos --->> ', todos[0].id);
+      return todos;
+    } catch (error) {
+      console.error("Error getting documents: ", error);
+    }
+  };
+
+  useEffect(() => {
+  getTodos();
+  }, []);
 
   const ITEMS_PER_PAGE = 3;
   const VISIBLE_PAGES = 3;
@@ -49,10 +71,11 @@ const App = (): JSX.Element => {
   const completedCount = todos.length - activeCount;
 
   const addTodo = (todo: { title: string; emoji: string }) => {
+    // Se soluciona cuando lo añada a Firebase
     setTodos(prev => [
       ...prev,
       {
-        id: prev.length + 1,
+        id: prev.length + '1',
         title: todo.title,
         completed: false,
         emoji: todo.emoji,
@@ -60,7 +83,7 @@ const App = (): JSX.Element => {
     ]);
   };
 
-  const removeTodo = (id: number) => {
+  const removeTodo = (id: string) => {
     setTodos(prev => prev.filter(todo => todo.id !== id));
     goToNextPageWithTodo();
   };
@@ -72,7 +95,7 @@ const App = (): JSX.Element => {
     }
   }
 
-  const toggleTodo = (id: number) => {
+  const toggleTodo = (id: string) => {
     
     setTodos(prev => {
       const updatedTodos = prev.map(todo =>
@@ -117,10 +140,20 @@ const App = (): JSX.Element => {
       return updatedTodos;
     });
   }
-
+  const loginWithGoogle = async () => {
+    try {
+      const result = await signInWithPopup(auth, provider);
+      console.log("Usuario logueado:", result.user);
+    } catch (error) {
+      console.error("Error al loguearse:", error);
+    }
+  }
   return (
     <div className="todoapp">
       <Header onSaveTarea={addTodo} />
+      <button onClick={loginWithGoogle}>
+        Iniciar sesión con Google
+      </button>
       <Todos todos={currentTodos} 
       onremove={removeTodo} 
       onselect={toggleTodo} 

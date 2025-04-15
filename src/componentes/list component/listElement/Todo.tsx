@@ -5,8 +5,8 @@ import { type Todo } from "../../../utils/typeScript/vite-env";
 
 interface props{
     todo:Todo,
-    onremove: (id: number) => void,
-    onselect: (id: number) => void
+    onremove: (id: string) => void,
+    onselect: (id: string) => void
 }
 export const TodoItem: React.FC <props>=({todo, onremove, onselect}) =>{
 

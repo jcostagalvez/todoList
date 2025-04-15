@@ -6,8 +6,8 @@ import {useRef, useState } from 'react'
 //Esto solo podemso hacerlo con React.FC y sirve por asi decirlo para pasarle parametros
 interface props {
     todos: ListOfTodos,
-    onremove: (id: number) => void
-    onselect: (id: number) => void
+    onremove: (id: string) => void
+    onselect: (id: string) => void
     onDragDrop: (todos: ListOfTodos) => void
 }
 
