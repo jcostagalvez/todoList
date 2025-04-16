@@ -6,7 +6,7 @@ import { FilterValue, ListOfTodos, Todo } from './utils/typeScript/vite-env';
 import { TODO_FILTERS } from './utils/typeScript/consts';
 import { Header } from './componentes/header/header';
 import { auth, db, provider } from './firebase';
-import { collection, getDocs, query } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, getDocs, orderBy, query, updateDoc, where } from 'firebase/firestore';
 import { signInWithPopup } from 'firebase/auth';
 
 
@@ -16,11 +16,9 @@ const App = (): JSX.Element => {
   const [currentPage, setCurrentPage] = useState(1);
 
   const getTodos = async () => {
-    console.log('Pasa por el metodo async');
     try {
-      const q = query(collection(db, 'tareas'));
+      const q = query(collection(db, 'tareas'), orderBy('completed', 'asc'));
       const querySnapshot = await getDocs(q);
-      console.log('Esta llegando al getTodos')
       const todos: Todo[] = querySnapshot.docs.map(doc => {
         const data = doc.data() as Omit<Todo, "id">;
         return {
@@ -29,7 +27,6 @@ const App = (): JSX.Element => {
         };
       });
       setTodos(todos);
-      console.log('todos --->> ', todos[0].id);
       return todos;
     } catch (error) {
       console.error("Error getting documents: ", error);
@@ -37,7 +34,7 @@ const App = (): JSX.Element => {
   };
 
   useEffect(() => {
-  getTodos();
+    getTodos();
   }, []);
 
   const ITEMS_PER_PAGE = 3;
@@ -70,22 +67,34 @@ const App = (): JSX.Element => {
   const activeCount = todos.filter(todo => !todo.completed).length;
   const completedCount = todos.length - activeCount;
 
-  const addTodo = (todo: { title: string; emoji: string }) => {
-    // Se soluciona cuando lo añada a Firebase
-    setTodos(prev => [
-      ...prev,
-      {
-        id: prev.length + '1',
-        title: todo.title,
-        completed: false,
-        emoji: todo.emoji,
-      },
-    ]);
+  const addTodo = async(todo: { title: string; emoji: string }) => {
+    if(todos.length < 100){
+      try{
+        await addDoc(collection(db, 'tareas'), {
+          title : todo.title,
+          emoji : todo.emoji,
+          completed: false
+        });
+        getTodos();
+      }catch(error){
+        console.error("Error al agregar la tarea:", error);
+      }
+    }
+    else{
+      alert("La base de datos ha llegado a 100 tareas, hay que eliminar para seguir agragando");
+    }
   };
 
-  const removeTodo = (id: string) => {
-    setTodos(prev => prev.filter(todo => todo.id !== id));
-    goToNextPageWithTodo();
+  const removeTodo = async (id: string) => {
+    try {
+      console.log('se ejecuta el try');
+      await deleteDoc(doc(db, 'tareas', id));
+      getTodos();
+      goToNextPageWithTodo();
+    } catch (error) {
+      console.log('se ejecuta el catch');
+      console.error('Error eliminando el documento:', error);
+    }
   };
 
   const goToNextPageWithTodo = () => {
@@ -95,26 +104,35 @@ const App = (): JSX.Element => {
     }
   }
 
-  const toggleTodo = (id: string) => {
-    
-    setTodos(prev => {
-      const updatedTodos = prev.map(todo =>
-      todo.id === id ? { ...todo, completed: !todo.completed } : todo
-      );
-      const toggledTodo = updatedTodos.find(todo => todo.id === id);
-      if (toggledTodo && toggledTodo.completed) {
-      // Move the toggled todo to the end of the list
-      return [...updatedTodos.filter(todo => todo.id !== id), toggledTodo];
-      }
-      return updatedTodos;
-    });
-
+  const toggleTodo = async (id: string) => {
+    try {
+      const ref = doc(db, 'tareas', id);
+      const todoUpdate = todos.find(todo => todo.id === id);
+      await updateDoc(ref, {completed: !todoUpdate?.completed});
+      getTodos();
+    } catch (error) {
+      console.log('se ejecuta el catch');
+      console.error('Error al actualizar:', error);
+    }
     if (filter != 'all') goToNextPageWithTodo();
 
   };
 
-  const clearCompleted = () => {
-    setTodos(prev => prev.filter(todo => !todo.completed));
+  const clearCompleted = async () => {
+    try {
+      // 1. Hacemos una query solo por los completados
+      const q = query(collection(db, 'tareas'), where('completed', '==', true));
+      const snapshot = await getDocs(q);
+  
+      // 2. Borramos cada uno
+      const deletePromises = snapshot.docs.map(docSnap =>
+        deleteDoc(doc(db, 'tareas', docSnap.id))
+      );
+      await Promise.all(deletePromises);
+      getTodos();
+    } catch (error) {
+      console.error('Error al eliminar completados:', error);
+    }
   };
 
   const changeFilter = (newFilter: FilterValue) => {
